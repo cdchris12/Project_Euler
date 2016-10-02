@@ -108,10 +108,17 @@ def colSearch(matrix, step):
     return res
 # End def
 
-def main():
-    #global step
-    #global grid
+def diagSearch(matrix, step):
+    res = 0
     
+    # search diagonally (top left to bottom right), starting from col[0][col_len - step] and going up to, but not including, col[0][0]
+    # search diagonally (top left to bottom right), starting from row[0][0] and going to row[0][row_len - step]
+    
+    start_row
+    
+# End def
+
+def main():
     max_num = 0
     matrix = readMatrix(grid)
     
@@ -125,6 +132,10 @@ def main():
         max_num = temp
     # End if
     
+    temp = diagSearch(matrix, step)
+    if temp > max_num:
+        max_num = temp
+    # End if
     
     #TODO
     # Search diagonally from bottom left to top right
