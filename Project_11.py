@@ -22,6 +22,8 @@ grid = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08\n\
 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54\n\
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48"
 
+step = 4
+
 def readMatrix(matrix):
     # Input is a space seperated list of values, with rows denoted by newlines.
     # Output is a two dimensional list of lists
@@ -43,17 +45,92 @@ def readMatrix(matrix):
     return lst
 # End def
 
+def rowSearch(matrix, step):
+    # input is a list of lists, each of which contains numbers which are <= 99
+    # output is the highest product from among the searched numbers.
+    res = 0
+    
+    for row in matrix:
+        head = 0
+        tail = head + step
+        end = len(row)
+    
+        while tail <= end:
+            tmp = 1
+        
+            # Any number times zero is always zero, so we should skip the calculations if this set contains a zero.
+            if 0 not in row[head:tail]:
+            
+                for i in range(0, step):
+                    tmp *= row[head + i]
+                # End for
+            
+                if tmp > res:
+                    res = tmp
+                # End if
+            # End if
+        
+            head += 1
+            tail += 1
+        # End while
+    # End for
+    
+    return res
+# End def
+
+def colSearch(matrix, step):
+    # input is a parsed matrix (list of lists)
+    # output is the highest product from among the searched numbers
+    res = 0
+    row_end = len(matrix[0]) # This tells us how long each row is
+    col_end = len(matrix) # This tells us how deep each column is
+    
+    for i in range(0, row_end):
+        head = 0
+        tail = head + step
+        
+        while tail <= col_end:
+            tmp = 1
+    
+            for j in range(0, step):
+                tmp *= matrix[head + j][i]
+            # End for
+    
+            if tmp > res:
+                res = tmp
+            # End if
+    
+            head += 1
+            tail += 1
+        # End while
+    # End for
+    
+    return res
+# End def
+
 def main():
+    #global step
+    #global grid
+    
     max_num = 0
     matrix = readMatrix(grid)
     
+    temp = rowSearch(matrix, step)
+    if temp > max_num:
+        max_num = temp
+    # End if
+    
+    temp = colSearch(matrix, step)
+    if temp > max_num:
+        max_num = temp
+    # End if
+    
+    
     #TODO
-    # Search by row
-    # Search by column
     # Search diagonally from bottom left to top right
     # Search diagonally from top left to bottom right
     
-    print "The greatest product of any four adjacent numbers in this grid is: %s" % big_num
+    print "The greatest product of any four adjacent numbers in this grid is: %s" % max_num
 # End def
 
 if __name__ == "__main__":
