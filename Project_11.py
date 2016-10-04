@@ -47,8 +47,10 @@ def readMatrix(matrix):
 
 def rowSearch(matrix, step):
     # input is a list of lists, each of which contains numbers which are <= 99
-    # output is the highest product from among the searched numbers.
+    # output is a tuple containing the highest product from among the searched numbers and the numbers used to make that product.
+    
     res = 0
+    numbers = []
     
     for row in matrix:
         head = 0
@@ -60,13 +62,16 @@ def rowSearch(matrix, step):
         
             # Any number times zero is always zero, so we should skip the calculations if this set contains a zero.
             if 0 not in row[head:tail]:
+                nums = []
             
                 for i in range(0, step):
                     tmp *= row[head + i]
+                    nums.append(row[head + 1])
                 # End for
             
                 if tmp > res:
                     res = tmp
+                    numbers = nums
                 # End if
             # End if
         
@@ -75,13 +80,15 @@ def rowSearch(matrix, step):
         # End while
     # End for
     
-    return res
+    return res, numbers
 # End def
 
 def colSearch(matrix, step):
     # input is a parsed matrix (list of lists)
-    # output is the highest product from among the searched numbers
+    # output is a tuple containing the highest product from among the searched numbers and the numbers used to make that product.
+    
     res = 0
+    numbers = []
     row_end = len(matrix[0]) # This tells us how long each row is
     col_end = len(matrix) # This tells us how deep each column is
     
@@ -91,13 +98,16 @@ def colSearch(matrix, step):
         
         while tail <= col_end:
             tmp = 1
+            nums = []
     
             for j in range(0, step):
                 tmp *= matrix[head + j][i]
+                nums.append(matrix[head + j][i])
             # End for
     
             if tmp > res:
                 res = tmp
+                numbers = nums
             # End if
     
             head += 1
@@ -105,43 +115,141 @@ def colSearch(matrix, step):
         # End while
     # End for
     
-    return res
+    return res, numbers
 # End def
 
 def diagSearch(matrix, step):
-    res = 0
+    # input is a parsed matrix (list of lists)
+    # output is a tuple containing the highest product from among the searched numbers and the numbers used to make that product.
     
-    # search diagonally (top left to bottom right), starting from col[0][col_len - step] and going up to, but not including, col[0][0]
+    res = 0
+    numbers = []
+    
+    # search diagonally (bottom left to bottom right), starting from col[0][col_len - step] and going up to, but not including, col[0][0]
     # search diagonally (top left to bottom right), starting from row[0][0] and going to row[0][row_len - step]
     
-    start_row
+    # [y][x]
+    y_max = len(matrix) - step
+    x_max = len(matrix) - step
     
+    # Diagonal search from bottom left to top right
+    for y in range(y_max, 0, -1):
+        x = 0
+        
+        while x < (y_max - y):
+            tmp = 1
+            nums = []
+        
+            for i in range(0, step):
+                tmp *= matrix[y - i][x + i]
+                nums.append(matrix[y - i][x + i])
+            # End for
+        
+            if tmp > res:
+                res = tmp
+                numbers = nums
+            # End if
+        
+            y -= 1
+            x += 1
+        # End while
+    # End for
+    
+    for x in range(0, x_max):
+        y = 0
+            
+        while y < (x_max - x):
+            tmp = 1
+            nums = []
+        
+            for i in range(0, step):
+                tmp *= matrix[y - i][x + i]
+                nums.append(matrix[y - i][x + i])
+            # End for
+        
+            if tmp > res:
+                res = tmp
+                numbers = nums
+            # End if
+        
+            x += 1
+            y -= 1
+        # End while
+    # End for
+    
+    # Diagonal search from bottom left to top right
+    for x in range(x_max, 0, -1):
+        y = y_max
+        
+        while x > y:
+            tmp = 1
+            nums = []
+        
+            for i in range(0, step):
+                tmp *= matrix[y - i][x - i]
+                nums.append(matrix[y - i][x - i])
+            # End for
+        
+            if tmp > res:
+                res = tmp
+                numbers = nums
+            # End if
+        
+            x += 1
+            y -= 1
+        # End while
+    # End for
+    
+    for y in range(0, y_max):
+        x = x_max
+        
+        while x > y:
+            tmp = 1
+            nums = []
+        
+            for i in range(0, step):
+                tmp *= matrix[y - i][x - i]
+                nums.append(matrix[y - i][x - i])
+            # End for
+        
+            if tmp > res:
+                res = tmp
+                numbers = nums
+            # End if
+        
+            y -= 1
+            x += 1
+        # End while
+    # End for
+    
+    return res, numbers
 # End def
 
 def main():
     max_num = 0
+    numbers = []
     matrix = readMatrix(grid)
     
-    temp = rowSearch(matrix, step)
+    temp, nums = rowSearch(matrix, step)
     if temp > max_num:
         max_num = temp
+        numbers = nums
     # End if
     
-    temp = colSearch(matrix, step)
+    temp, nums = colSearch(matrix, step)
     if temp > max_num:
         max_num = temp
+        numbers = nums
     # End if
     
-    temp = diagSearch(matrix, step)
+    temp, nums = diagSearch(matrix, step)
     if temp > max_num:
         max_num = temp
+        numbers = nums
     # End if
     
-    #TODO
-    # Search diagonally from bottom left to top right
-    # Search diagonally from top left to bottom right
-    
-    print "The greatest product of any four adjacent numbers in this grid is: %s" % max_num
+    print "The greatest product of any four adjacent numbers in this grid is: %s.\n\
+    That product was made from the %s numbers: %s" % (max_num, step, repr(numbers).replace("[", "").replace("]", ""))
 # End def
 
 if __name__ == "__main__":
