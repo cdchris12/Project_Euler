@@ -131,12 +131,16 @@ def diagSearch(matrix, step):
     # [y][x]
     y_max = len(matrix) - step
     x_max = len(matrix) - step
+    size = len(matrix)
+    
     
     # Diagonal search from bottom left to top right
-    for y in range(y_max, 0, -1):
+    for y_orig in range(size - 1, 0, -1):
         x = 0
+        y = y_orig
+        #print str(y).zfill(2)
         
-        while x < (y_max - y):
+        while x <= x_max and y >= step:
             tmp = 1
             nums = []
         
@@ -152,58 +156,18 @@ def diagSearch(matrix, step):
         
             y -= 1
             x += 1
+            #print "\n"
         # End while
+        
+        #print str(y - (step-1)).zfill(2), str(x + (step-1)).zfill(2), "\n"
     # End for
     
-    for x in range(0, x_max):
-        y = 0
-            
-        while y < (x_max - x):
-            tmp = 1
-            nums = []
+    for y_orig in range(0, size):
+        x = 0
+        y = y_orig
+        #print str(y).zfill(2)
         
-            for i in range(0, step):
-                tmp *= matrix[y - i][x + i]
-                nums.append(matrix[y - i][x + i])
-            # End for
-        
-            if tmp > res:
-                res = tmp
-                numbers = nums
-            # End if
-        
-            x += 1
-            y -= 1
-        # End while
-    # End for
-    
-    # Diagonal search from bottom left to top right
-    for x in range(x_max, 0, -1):
-        y = y_max
-        
-        while x > y:
-            tmp = 1
-            nums = []
-        
-            for i in range(0, step):
-                tmp *= matrix[y - i][x - i]
-                nums.append(matrix[y - i][x - i])
-            # End for
-        
-            if tmp > res:
-                res = tmp
-                numbers = nums
-            # End if
-        
-            x += 1
-            y -= 1
-        # End while
-    # End for
-    
-    for y in range(0, y_max):
-        x = x_max
-        
-        while x > y:
+        while x >= step and y >= step:
             tmp = 1
             nums = []
         
@@ -218,8 +182,68 @@ def diagSearch(matrix, step):
             # End if
         
             y -= 1
-            x += 1
+            x -= 1
+            #print "\n"
         # End while
+        
+        #print str(y - (step-1)).zfill(2), str(x + (step-1)).zfill(2), "\n"
+    # End for
+    
+    for x_orig in range(size - 1, 0, -1):
+        y = size - 1
+        x = x_orig
+        #print str(y).zfill(2)
+        #print str(x).zfill(2)
+    
+        while y >= step and x >= step:
+            tmp = 1
+            nums = []
+    
+            for i in range(0, step):
+                tmp *= matrix[y - i][x - i]
+                nums.append(matrix[y - i][x - i])
+            # End for
+    
+            if tmp > res:
+                res = tmp
+                numbers = nums
+            # End if
+    
+            y -= 1
+            x -= 1
+            #print "\n"
+        # End while
+    
+        #print str(y - (step-1)).zfill(2), str(x - (step-1)).zfill(2), "\n"
+    # End for
+    
+    
+    for y_orig in range(size - 1, -1, -1):
+        x = size - 1
+        y = y_orig
+        print str(y).zfill(2)
+        print str(x).zfill(2)
+        
+        while x >= step and y >= step:
+            tmp = 1
+            nums = []
+        
+            for i in range(0, step):
+                tmp *= matrix[y - i][x - i]
+                nums.append(matrix[y - i][x - i])
+            # End for
+        
+            if tmp > res:
+                res = tmp
+                numbers = nums
+            # End if
+        
+            y -= 1
+            x -= 1
+            #print "\n"
+        # End while
+        
+        print str(y - (step-1)).zfill(2), str(x - (step-1)).zfill(2), "\n"
     # End for
     
     return res, numbers
@@ -249,7 +273,7 @@ def main():
     # End if
     
     print "The greatest product of any four adjacent numbers in this grid is: %s.\n\
-    That product was made from the %s numbers: %s" % (max_num, step, repr(numbers).replace("[", "").replace("]", ""))
+That product was made from the %s numbers: %s" % (max_num, step, repr(numbers).replace("[", "").replace("]", ""))
 # End def
 
 if __name__ == "__main__":
