@@ -1,32 +1,37 @@
 #!/usr/bin/python
 
+from time import sleep
+
+memory = {
+    (0,1): 1,
+    (1,0): 1
+}
+
 matrix = []
 size = 20
 
-def traverseMatrix(cur_pos, cnt):
+def traverseMatrix(cur_pos):
     # Input will be a tuple of the current position in the list and the current number of routes
     # Output will be the adjusted number of routes
     
     y, x = cur_pos
     
-    print "Checking y: %s, x: %s." % (y, x)
+    #print "Checking y: %s, x: %s." % (y, x)
+    #print "Count is: %s" % cnt
     
-    # Down
-    if y + 1 < size:
-        cnt += traverseMatrix((y + 1, x), cnt)
+    if cur_pos in memory:
+        return memory[cur_pos]
     # End if
     
-    # Right
-    if x + 1 < size:
-        cnt += traverseMatrix((y, x + 1), cnt)
-    # End if
+    paths = 0
+    if 0 in cur_pos:
+        paths += 1
+    else:
+        paths = traverseMatrix((y, x - 1)) + traverseMatrix((y - 1, x))
+    # End if/else block
     
-    # Down and Right
-    if y + 1 < size and x + 1 < size:
-        cnt += traverseMatrix((y + 1, x + 1), cnt)
-    # End if
-    
-    return cnt
+    memory[cur_pos] = paths
+    return paths
 # End def
 
 def main():
@@ -38,7 +43,7 @@ def main():
         # End for
     # End for
     
-    cnt = traverseMatrix((0, 0), 0)
+    cnt = traverseMatrix((size, size))
     
     print cnt
 # End def
